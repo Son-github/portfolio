@@ -1,0 +1,98 @@
+name: Portfolio CI and Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# 실행 중인 배포를 취소하지 않습니다. 새 실행이 이전 업로드와 섞이지 않게 직렬화합니다.
+concurrency:
+  group: portfolio-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Check and build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      artifact-id: ${{ steps.artifact.outputs.artifact-id }}
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test:deploy
+      # Next.js가 routes.d.ts를 생성한 뒤 별도 타입 검사도 실행합니다.
+      - run: npm run build
+      - run: npm run typecheck
+      - name: Save the checked static build
+        id: artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: portfolio-${{ github.sha }}
+          path: out/
+          if-no-files-found: error
+          retention-days: 3
+
+  deploy:
+    name: Deploy static site
+    needs: build
+    # 초기 설정 전에는 배포하지 않습니다. PR/포크/다른 브랜치에서도 AWS 인증을 하지 않습니다.
+    if: >-
+      vars.DEPLOY_ENABLED == 'true' &&
+      github.repository == 'Son-github/portfolio' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
+      AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+      AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+      S3_BUCKET_NAME: ${{ vars.S3_BUCKET_NAME }}
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "22"
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact-id }}
+          path: out/
+          merge-multiple: true
+      - name: Check required configuration before AWS authentication
+        run: node scripts/deploy-static.mjs --check
+      - name: Get temporary AWS credentials through GitHub OIDC
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          allowed-account-ids: ${{ env.AWS_ACCOUNT_ID }}
+          role-session-name: portfolio-${{ github.run_id }}-${{ github.run_attempt }}
+          role-duration-seconds: 900
+          unset-current-credentials: true
+          mask-aws-account-id: true
+      - name: Publish, refresh CDN, and verify the deployed HTML
+        run: node scripts/deploy-static.mjs

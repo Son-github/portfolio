@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+.env*
+.DS_Store
+
+
+# Terraform 로컬 작업/상태 파일 (설정 예제는 유지)
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+crash.log

@@ -1,0 +1,19 @@
+# 값 수정용 예제입니다. 이 파일 자체는 Terraform이 자동으로 읽지 않습니다.
+# 실제 인증 키나 세션 토큰은 입력하지 마세요.
+aws_profile         = "default"
+aws_region          = "us-east-1"
+expected_account_id = "953013523670"
+project_name        = "son-jongin-portfolio"
+domain_name         = "www.son-portfolio.site"
+
+# 인증서 요청 → 가비아 인증 CNAME 등록 → 도메인 연결 순서입니다.
+request_certificate  = false
+enable_custom_domain = false
+force_destroy_bucket = false
+
+# GitHub Actions 역할도 정의만 제공하며 기본은 비활성화입니다.
+enable_github_actions        = false
+github_repository            = "Son-github/portfolio"
+github_deploy_branch         = "main"
+# 계정에 GitHub OIDC 제공자가 이미 있으면 false로 유지해 재사용합니다.
+create_github_oidc_provider  = false
