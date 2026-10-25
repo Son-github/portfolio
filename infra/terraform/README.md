@@ -7,7 +7,7 @@
 ## 구조
 
 ```text
-방문자 → CloudFront HTTPS → OAC 서명 → 비공개 S3
+방문자 → CloudFront HTTPS → OAC 서명 → 비공개 S3(서울 ap-northeast-2)
 가비아 DNS: www CNAME → CloudFront
 ACM(us-east-1): DNS 소유권 검증 후 인증서 연결
 GitHub main → 검사·빌드 → OIDC 임시 역할 → S3 업로드·CDN 캐시 갱신
@@ -32,7 +32,7 @@ GitHub main → 검사·빌드 → OIDC 임시 역할 → S3 업로드·CDN 캐�
 
 Git 업로드, 로컬 Terraform 설정, GitHub 변수 등록, 가비아 CNAME 등록은 [처음 배포 안내](../../docs/GETTING_STARTED.md)에 순서대로 정리했습니다. 해당 문서의 Terraform 명령은 **사용자가 실행할 때 실제 AWS 자원을 생성하고 비용이 발생할 수 있는 절차**입니다. 이 파일 작성 작업에서는 실행하지 않았습니다.
 
-AWS 프로필은 `default`, 리전은 `us-east-1`입니다. CloudFront용 인증서는 이 리전에 있어야 합니다. `expected_account_id`로 의도한 계정만 허용하고 인증 키는 코드에 저장하지 않습니다.
+AWS 프로필은 `default`입니다. 기본 제공자는 서울(`ap-northeast-2`)을 사용하며 S3·배포 대상 리전도 서울입니다. CloudFront용 ACM 인증서와 발급 확인만 `aws.us_east_1` 별칭 제공자로 버지니아(`us-east-1`)를 사용합니다. 두 제공자 모두 같은 프로필과 계정 제한을 적용합니다. `expected_account_id`로 의도한 계정만 허용하고 인증 키는 코드에 저장하지 않습니다.
 
 ## 단계별 플래그
 

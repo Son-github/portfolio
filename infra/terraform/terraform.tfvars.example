@@ -1,7 +1,8 @@
 # 값 수정용 예제입니다. 이 파일 자체는 Terraform이 자동으로 읽지 않습니다.
 # 실제 인증 키나 세션 토큰은 입력하지 마세요.
 aws_profile         = "default"
-aws_region          = "us-east-1"
+# S3·배포 리전입니다. 인증서는 providers.tf의 us-east-1 별칭을 사용합니다.
+aws_region          = "ap-northeast-2"
 expected_account_id = "953013523670"
 project_name        = "son-jongin-portfolio"
 domain_name         = "www.son-portfolio.site"

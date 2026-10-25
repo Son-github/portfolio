@@ -30,8 +30,8 @@ export function readConfiguration(env) {
     if (!env[key]?.trim())
       throw new Error(`필수 GitHub Actions Variable이 없습니다: ${key}`);
   }
-  if (env.AWS_REGION !== "us-east-1")
-    throw new Error("Terraform 구성과 같은 us-east-1 리전을 지정하세요.");
+  if (env.AWS_REGION !== "ap-northeast-2")
+    throw new Error("S3와 같은 서울(ap-northeast-2) 배포 리전을 지정하세요.");
   if (!/^[0-9]{12}$/.test(env.AWS_ACCOUNT_ID))
     throw new Error("AWS_ACCOUNT_ID 형식이 올바르지 않습니다.");
   if (!env.AWS_ROLE_ARN.startsWith(`arn:aws:iam::${env.AWS_ACCOUNT_ID}:role/`))

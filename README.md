@@ -35,7 +35,7 @@ flowchart LR
     Deploy -->|캐시 갱신·배포 검증| CDN
 ```
 
-호스팅은 비공개 S3와 CloudFront 종량제로 정의하고, DNS는 가비아에서 관리합니다. 별도의 상시 실행 서버·WAF·Route 53 영역은 구성하지 않습니다. CloudFront 무료 사용량 초과, S3 저장·요청, 도메인 갱신은 과금 대상입니다. 세부 리소스와 비용 범위는 [Terraform 안내](infra/terraform/README.md)에 정리했습니다.
+호스팅은 비공개 S3와 CloudFront 종량제로 정의하고, DNS는 가비아에서 관리합니다. S3·배포 리전은 서울, CloudFront용 ACM 인증서는 버지니아로 분리했습니다. 별도의 상시 실행 서버·WAF·Route 53 영역은 구성하지 않습니다. CloudFront 무료 사용량 초과, S3 저장·요청, 도메인 갱신은 과금 대상입니다. 세부 리소스와 비용 범위는 [Terraform 안내](infra/terraform/README.md)에 정리했습니다.
 
 자동 배포는 초기 인프라·OIDC 역할·GitHub 변수 설정 후 활성화됩니다. 현재 저장소에서는 웹사이트 코드와 인프라·CI/CD 정의를 제공합니다.
 

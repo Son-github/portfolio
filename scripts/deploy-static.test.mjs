@@ -18,7 +18,7 @@ const base = {
   GITHUB_REPOSITORY: "Son-github/portfolio",
   GITHUB_REF: "refs/heads/main",
   GITHUB_EVENT_NAME: "push",
-  AWS_REGION: "us-east-1",
+  AWS_REGION: "ap-northeast-2",
   AWS_ACCOUNT_ID: "111111111111",
   AWS_ROLE_ARN: "arn:aws:iam::111111111111:role/test-deploy",
   S3_BUCKET_NAME: "test-portfolio-bucket",
@@ -38,7 +38,7 @@ function distribution() {
         Items: [
           {
             Id: "site",
-            DomainName: `${base.S3_BUCKET_NAME}.s3.us-east-1.amazonaws.com`,
+            DomainName: `${base.S3_BUCKET_NAME}.s3.${base.AWS_REGION}.amazonaws.com`,
             OriginAccessControlId: "test-oac",
           },
         ],
@@ -131,7 +131,7 @@ test("CDN must use the expected bucket, OAC, distribution ID, and site hostname"
   assert.doesNotThrow(() => assertDistribution(distribution(), config));
   const wrongBucket = distribution();
   wrongBucket.DistributionConfig.Origins.Items[0].DomainName =
-    "another-bucket.s3.us-east-1.amazonaws.com";
+    "another-bucket.s3.ap-northeast-2.amazonaws.com";
   assert.throws(() => assertDistribution(wrongBucket, config), /기본 원본/);
   const noOac = distribution();
   delete noOac.DistributionConfig.Origins.Items[0].OriginAccessControlId;
@@ -168,4 +168,18 @@ test("incomplete or symlinked HTML build entries cannot be uploaded", (t) => {
     path.join(directory, "index.html"),
   );
   assert.throws(() => assertBuild(directory), /정적 빌드 파일/);
+});
+
+test("deployment uses Seoul and rejects an origin in the certificate region", () => {
+  assert.equal(readConfiguration(base).region, "ap-northeast-2");
+  assert.throws(
+    () => readConfiguration({ ...base, AWS_REGION: "us-east-1" }),
+    /서울/,
+  );
+  const wrongRegion = distribution();
+  wrongRegion.DistributionConfig.Origins.Items[0].DomainName = `${base.S3_BUCKET_NAME}.s3.us-east-1.amazonaws.com`;
+  assert.throws(
+    () => assertDistribution(wrongRegion, readConfiguration(base)),
+    /기본 원본/,
+  );
 });

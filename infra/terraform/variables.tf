@@ -5,13 +5,13 @@ variable "aws_profile" {
 }
 
 variable "aws_region" {
-  description = "CloudFront용 ACM 인증서를 위해 us-east-1을 사용합니다."
+  description = "S3와 애플리케이션 배포는 서울 리전을 사용합니다. ACM은 별칭 제공자로 분리합니다."
   type        = string
-  default     = "us-east-1"
+  default     = "ap-northeast-2"
 
   validation {
-    condition     = var.aws_region == "us-east-1"
-    error_message = "CloudFront에서 사용하는 ACM 인증서는 us-east-1에 있어야 합니다."
+    condition     = var.aws_region == "ap-northeast-2"
+    error_message = "S3와 배포 리전은 서울(ap-northeast-2)로 지정하세요. ACM은 별도로 us-east-1을 사용합니다."
   }
 }
 

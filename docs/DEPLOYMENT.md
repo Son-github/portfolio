@@ -54,10 +54,12 @@ CDN 생성 완료를 확인한 뒤 콘텐츠 배포를 활성화합니다. Route
 | `DEPLOY_ENABLED`             | 초기에는 `false`. 모든 설정이 준비되면 `true`                                                          |
 | `AWS_ROLE_ARN`               | Terraform의 `github_deploy_role_arn`                                                                   |
 | `AWS_ACCOUNT_ID`             | `expected_account_id`와 같은 12자리 계정 ID                                                            |
-| `AWS_REGION`                 | `us-east-1`                                                                                            |
+| `AWS_REGION`                 | `ap-northeast-2`                                                                                       |
 | `S3_BUCKET_NAME`             | Terraform의 `bucket_name`                                                                              |
 | `CLOUDFRONT_DISTRIBUTION_ID` | Terraform의 `cloudfront_distribution_id`                                                               |
 | `SITE_URL`                   | **실제로 접속 가능한** HTTPS 루트 주소. 도메인 연결 전에는 `cloudfront_url`, 연결 후에는 `website_url` |
+
+S3와 파일 업로드는 서울(`ap-northeast-2`), CloudFront용 ACM 인증서는 버지니아(`us-east-1`)를 사용합니다. GitHub `AWS_REGION`에는 인증서 리전이 아닌 서울을 입력합니다. CloudFront와 IAM/OIDC는 글로벌 서비스입니다.
 
 `github_actions_variables` 출력에도 대응하는 값이 정리되어 있습니다. 출력은 `DEPLOY_ENABLED = false`를 기본으로 하므로 배포 활성화는 별도로 결정합니다. AWS access key나 secret key를 GitHub Secrets에 넣을 필요는 없습니다.
 

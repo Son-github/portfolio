@@ -49,7 +49,7 @@ cp -n terraform.tfvars.example terraform.tfvars
 
 ```hcl
 aws_profile         = "default"
-aws_region          = "us-east-1"
+aws_region          = "ap-northeast-2"
 expected_account_id = "본인의 12자리 AWS 계정 ID"
 project_name        = "son-jongin-portfolio"
 domain_name         = "www.son-portfolio.site"
@@ -62,6 +62,8 @@ enable_github_actions = true
 github_repository     = "Son-github/portfolio"
 github_deploy_branch  = "main"
 ```
+
+`aws_region`과 GitHub `AWS_REGION`은 S3가 위치한 서울(`ap-northeast-2`)입니다. CloudFront용 인증서만 Terraform의 `aws.us_east_1` 제공자로 버지니아에 생성합니다.
 
 `expected_account_id`는 본인 default 프로필의 계정과 같아야 합니다. 확인이 필요하면 직접 `aws sts get-caller-identity --profile default`를 실행할 수 있습니다.
 
@@ -101,7 +103,7 @@ terraform output github_actions_variables
 | `DEPLOY_ENABLED`             | 처음에는 `false`, 나머지 등록을 마친 뒤 `true`                |
 | `AWS_ROLE_ARN`               | `github_deploy_role_arn` 출력. null이면 역할 활성화 설정 확인 |
 | `AWS_ACCOUNT_ID`             | 본인의 12자리 계정 ID                                         |
-| `AWS_REGION`                 | `us-east-1`                                                   |
+| `AWS_REGION`                 | `ap-northeast-2`                                              |
 | `S3_BUCKET_NAME`             | `bucket_name` 출력                                            |
 | `CLOUDFRONT_DISTRIBUTION_ID` | `cloudfront_distribution_id` 출력                             |
 | `SITE_URL`                   | 최초에는 `cloudfront_url` 출력의 HTTPS 주소                   |
