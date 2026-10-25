@@ -38,7 +38,7 @@ export const projects: Project[] = [
     type: "개인 서비스 개발 및 클라우드 운영",
     summary: "일상 정보 서비스의 AWS 인프라 구축 및 운영",
     description:
-      "Spring Boot 기반 서비스를 AWS에 배포하고,\nGitHub Actions를 활용해 배포 과정을 자동화했습니다.\nCloudWatch 로그 분석으로 운영 중 발생한 오류를 해결했습니다.",
+      "Spring Boot 기반 서비스를 AWS에 배포하고,\nCloudWatch, AWS Lambda, OpenAI API를 활용해 오류 발생 시 \n예상 원인을 분석하고 대응 방안을 이메일로 전달하는 AIOps 환경을 구축했습니다.",
     technologies: [
       "AWS",
       "Spring Boot",
