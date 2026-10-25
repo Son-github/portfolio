@@ -54,3 +54,9 @@ output "github_actions_variables" {
     SITE_URL                   = var.enable_custom_domain ? "https://${var.domain_name}" : "https://${aws_cloudfront_distribution.site.domain_name}"
   }
 }
+
+
+output "github_oidc_subject" {
+  description = "IAM 신뢰 정책과 실제 GitHub 토큰에서 일치해야 하는 subject입니다."
+  value       = local.github_oidc_subject
+}

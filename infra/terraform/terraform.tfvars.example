@@ -18,3 +18,7 @@ github_repository            = "Son-github/portfolio"
 github_deploy_branch         = "main"
 # 계정에 GitHub OIDC 제공자가 이미 있으면 false로 유지해 재사용합니다.
 create_github_oidc_provider  = false
+
+# Son-github/portfolio의 공개 숫자 ID입니다. OIDC의 새 subject 형식에 사용합니다.
+github_owner_id      = "83553103"
+github_repository_id = "1432895806"

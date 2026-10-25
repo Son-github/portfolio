@@ -1,5 +1,8 @@
 locals {
-  github_oidc_url = "https://token.actions.githubusercontent.com"
+  github_oidc_url         = "https://token.actions.githubusercontent.com"
+  github_repository_parts = split("/", var.github_repository)
+  # 2026-07-15 이후 생성된 저장소의 기본 subject에는 변경 불가능한 숫자 ID가 포함됩니다.
+  github_oidc_subject = "repo:${local.github_repository_parts[0]}@${var.github_owner_id}/${local.github_repository_parts[1]}@${var.github_repository_id}:ref:refs/heads/${var.github_deploy_branch}"
   github_oidc_provider_arn = !var.enable_github_actions ? null : (
     var.create_github_oidc_provider
     ? aws_iam_openid_connect_provider.github[0].arn
@@ -37,7 +40,7 @@ resource "aws_iam_role" "github_deploy" {
       Condition = {
         StringEquals = {
           "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-          "token.actions.githubusercontent.com:sub" = "repo:${var.github_repository}:ref:refs/heads/${var.github_deploy_branch}"
+          "token.actions.githubusercontent.com:sub" = local.github_oidc_subject
         }
       }
     }]

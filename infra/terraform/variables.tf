@@ -108,3 +108,26 @@ variable "create_github_oidc_provider" {
   type        = bool
   default     = false
 }
+
+
+variable "github_owner_id" {
+  description = "GitHub 저장소 소유자의 숫자 ID입니다. 공개 메타데이터이며 OIDC subject를 정확히 제한합니다."
+  type        = string
+  default     = "83553103"
+
+  validation {
+    condition     = can(regex("^[0-9]+$", var.github_owner_id))
+    error_message = "GitHub 소유자 ID는 숫자로 지정하세요."
+  }
+}
+
+variable "github_repository_id" {
+  description = "GitHub 저장소의 숫자 ID입니다. 저장소를 다시 만들거나 다른 저장소를 사용할 때 함께 수정하세요."
+  type        = string
+  default     = "1432895806"
+
+  validation {
+    condition     = can(regex("^[0-9]+$", var.github_repository_id))
+    error_message = "GitHub 저장소 ID는 숫자로 지정하세요."
+  }
+}
