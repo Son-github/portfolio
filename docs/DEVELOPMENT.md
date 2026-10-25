@@ -381,3 +381,11 @@ export const heroProfile = {
 ## GitHub Actions 자동 배포
 
 워크플로·OIDC 역할·초기 설정·업데이트 및 복구 방법은 [배포 안내](DEPLOYMENT.md)를 참고하세요. AWS 인프라 정의는 [Terraform 안내](../infra/terraform/README.md)에 있습니다.
+
+## 연락처 수정
+
+`src/data/portfolio.ts`의 `email`과 `phone`을 바꾸면 Contact에 그대로 표시됩니다. 이메일은 메일 앱으로, 전화번호는 전화 앱으로 연결됩니다. `phone`의 `010-0000-0000`은 임시 값이므로 공개 배포 전에 실제 번호로 교체하세요. 전화번호를 공개하지 않으려면 빈 문자열로 지정하면 됩니다.
+
+## 연락처 GitHub와 비용 운영
+
+연락처 GitHub는 `src/data/portfolio.ts`의 `githubUrl`에서 수정하며, 기존 헤더 메뉴는 `showGithubInHeader: false`로 유지합니다. 비용 알림과 기본 지표 확인은 [운영 안내](OPERATIONS.md)를 참고하세요. 별도의 방문자 분석 스크립트는 사용하지 않습니다.

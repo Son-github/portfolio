@@ -1,42 +1,68 @@
-import { Mail, Github, ArrowUpRight } from "lucide-react";
+import { Mail, Phone, Github, ArrowUpRight } from "lucide-react";
 import { TextLines } from "@/components/ui/TextLines";
 import { portfolio } from "@/data/portfolio";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 import { StaggerContainer } from "@/components/ui/StaggerContainer";
-/** 이메일과 설정된 GitHub 주소로 직접 연결합니다. */
+
+/** 연락처 값은 data/portfolio.ts에서 수정합니다. 빈 전화번호는 표시하지 않습니다. */
 export function Contact() {
+  const contacts = [
+    {
+      label: "EMAIL",
+      value: portfolio.email,
+      href: `mailto:${portfolio.email}`,
+      Icon: Mail,
+    },
+    {
+      label: "PHONE",
+      value: portfolio.phone,
+      href: `tel:${portfolio.phone.replace(/[^\d+]/g, "")}`,
+      Icon: Phone,
+    },
+    {
+      label: "GITHUB",
+      value: portfolio.githubUrl.replace(/^https?:\/\//, "").replace(/\/$/, ""),
+      href: portfolio.githubUrl,
+      Icon: Github,
+    },
+  ].filter(({ value }) => value.trim());
+
   return (
     <section id="contact" className="section contact">
       <SectionReveal className="container contact-grid">
         <SectionHeading label="CONTACT">
           <TextLines text={portfolio.contactTitle} />
         </SectionHeading>
-        <StaggerContainer className="contact-content">
+        <StaggerContainer
+          className="contact-content"
+          selector=":scope > p, .contact-detail"
+        >
           <p className="body-copy">{portfolio.contactDescription}</p>
-          <div className="contact-buttons">
-            <a
-              className="button button-primary"
-              href={`mailto:${portfolio.email}`}
-              aria-label={`이메일 보내기: ${portfolio.email}`}
-            >
-              <Mail size={20} />
-              {portfolio.contactButton}
-              <ArrowUpRight size={14} />
-            </a>
-            {portfolio.githubUrl && (
+          <address className="contact-details">
+            {contacts.map(({ label, value, href, Icon }) => (
               <a
-                className="button"
-                href={portfolio.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                className="contact-detail"
+                href={href}
+                key={label}
+                target={label === "GITHUB" ? "_blank" : undefined}
+                rel={label === "GITHUB" ? "noopener noreferrer" : undefined}
               >
-                <Github size={21} />
-                GitHub
-                <ArrowUpRight size={14} />
+                <span className="contact-detail-icon" aria-hidden="true">
+                  <Icon size={20} strokeWidth={1.5} />
+                </span>
+                <span className="contact-detail-text">
+                  <span className="contact-detail-label">{label}</span>
+                  <span className="contact-detail-value">{value}</span>
+                </span>
+                <ArrowUpRight
+                  className="contact-detail-arrow"
+                  size={17}
+                  aria-hidden="true"
+                />
               </a>
-            )}
-          </div>
+            ))}
+          </address>
         </StaggerContainer>
       </SectionReveal>
     </section>

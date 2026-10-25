@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
+      source = "hashicorp/aws"
       # 검토한 AWS 제공자 버전 범위를 고정합니다.
       version = "~> 6.70.0"
     }

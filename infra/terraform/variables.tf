@@ -131,3 +131,32 @@ variable "github_repository_id" {
     error_message = "GitHub 저장소 ID는 숫자로 지정하세요."
   }
 }
+
+variable "enable_cost_budget" {
+  description = "기존 계정 전체 월간 COST 예산을 가져와 이메일 알림만 관리합니다. 새 예산은 만들지 않습니다."
+  type        = bool
+  default     = false
+}
+
+variable "cost_budget_name" {
+  description = "이미 존재하는 예산의 정확한 이름. 다른 예산을 실수로 생성하지 않도록 import로만 가져옵니다."
+  type        = string
+  default     = "My Monthly Cost Budget"
+
+  validation {
+    condition     = length(trimspace(var.cost_budget_name)) > 0
+    error_message = "가져올 기존 예산 이름을 입력하세요."
+  }
+}
+
+variable "budget_alert_email" {
+  description = "예산 이메일 알림 수신자. 로컬 tfvars 또는 TF_VAR_budget_alert_email로만 입력하세요."
+  type        = string
+  sensitive   = true
+  default     = ""
+
+  validation {
+    condition     = var.budget_alert_email == "" || can(regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$", var.budget_alert_email))
+    error_message = "budget_alert_email에 올바른 이메일 주소를 입력하세요."
+  }
+}

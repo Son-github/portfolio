@@ -64,7 +64,7 @@ EC2, ECS, ALB, NAT Gateway, RDS, KMS 키, 로그 저장소, 원격 상태용 S3�
 
 ## 검증 범위
 
-제공자 문서와 코드 참조를 확인했으며 Terraform 초기화·검증·계획·적용 명령은 실행하지 않았습니다. `.tfvars`, `.tfstate`, 계획 파일과 `.terraform/`은 Git에서 제외하고, 제공자 잠금 파일 `.terraform.lock.hcl`은 향후 초기화 후 버전 관리할 수 있습니다.
+초기 파일 작성 단계에서는 Terraform 명령을 실행하지 않았습니다. 이후 운영 기능 추가(2026-10-25)에서 사용자의 요청에 따라 `fmt`, `validate`, 읽기 전용 `plan`을 수행했습니다. `apply`는 실행하지 않았습니다. 결과와 기존 CloudFront drift는 [검증 기록](../../docs/OPERATIONS-VALIDATION.md)에 정리했습니다. `.tfvars`, `.tfstate`, 계획 파일과 `.terraform/`은 Git에서 제외하고, 제공자 잠금 파일 `.terraform.lock.hcl`은 향후 초기화 후 버전 관리할 수 있습니다.
 
 ## 공식 참고
 
@@ -88,3 +88,11 @@ repo:Son-github@83553103/portfolio@1432895806:ref:refs/heads/main
 Terraform 파일을 push하는 것만으로 AWS 역할 정책이 바뀌지는 않습니다. 사용자가 로컬에서 새 계획을 검토하고 신뢰 정책 변경을 직접 반영해야 합니다. 기존 인프라를 먼저 삭제할 필요는 없습니다.
 
 [GitHub의 immutable subject 공식 설명](https://docs.github.com/en/actions/reference/security/oidc#immutable-subject-claims)
+
+## 기존 예산과 운영 관측
+
+`budgets.tf`는 새 예산을 만들지 않고 `My Monthly Cost Budget`을 조건부 import합니다. `enable_cost_budget` 기본값은 false입니다. 기존 월 $5 한도·비용 기준·3개 알림 조건을 유지하며 ACTUAL 절대 금액 $1·$3 초과 이메일을 추가합니다. 5개 알림 수신자는 민감 변수 `budget_alert_email`로 통일합니다. Budget Actions는 없습니다.
+
+감시 범위는 계정 전체이며 크레딧·환불 제외 UnblendedCost 기준입니다. 이 예산의 Project 태그는 비용 필터가 아닙니다. 알림 집계에는 지연이 있으며 결제 상한이나 자동 차단이 아닙니다.
+
+기존 CloudFront에 별도 origin drift가 있어 전체 계획의 무검토 적용은 피해야 합니다. 이번 예산 편입의 제한된 계획·사용자 적용 절차, 이메일 입력과 수동 중지·재개는 [운영 안내](../../docs/OPERATIONS.md)를 확인하세요. AWS 호스팅·가비아 DNS에는 변경이 없습니다.

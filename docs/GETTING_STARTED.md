@@ -61,6 +61,8 @@ force_destroy_bucket = false
 enable_github_actions = true
 github_repository     = "Son-github/portfolio"
 github_deploy_branch  = "main"
+github_owner_id       = "83553103"
+github_repository_id  = "1432895806"
 ```
 
 `aws_region`과 GitHub `AWS_REGION`은 S3가 위치한 서울(`ap-northeast-2`)입니다. CloudFront용 인증서만 Terraform의 `aws.us_east_1` 제공자로 버지니아에 생성합니다.

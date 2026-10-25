@@ -9,7 +9,7 @@ export function Header() {
           {portfolio.englishName}
         </a>
         <nav aria-label="상단 메뉴">
-          {portfolio.githubUrl && (
+          {portfolio.showGithubInHeader && portfolio.githubUrl && (
             <a
               href={portfolio.githubUrl}
               target="_blank"

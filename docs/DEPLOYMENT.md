@@ -75,7 +75,7 @@ S3와 파일 업로드는 서울(`ap-northeast-2`), CloudFront용 ACM 인증서�
 
 ```text
 aud = sts.amazonaws.com
-sub = repo:Son-github/portfolio:ref:refs/heads/main
+sub = repo:Son-github@83553103/portfolio@1432895806:ref:refs/heads/main
 ```
 
 단일 저장소·브랜치에 제한하며 와일드카드는 사용하지 않습니다. 워크플로의 `id-token: write`는 배포 작업에만 있습니다. 빌드 작업에는 AWS 자격 증명을 전달하지 않습니다.
@@ -121,3 +121,19 @@ HTML을 마지막에 반영하고 이전 JS 파일을 유지해 배포 중 오�
 - [AWS 자격 증명 Action](https://github.com/aws-actions/configure-aws-credentials)
 - [GitHub 빌드 아티팩트](https://github.com/actions/upload-artifact)
 - [IAM OIDC 제공자](https://github.com/hashicorp/terraform-provider-aws/blob/v6.70.0/website/docs/r/iam_openid_connect_provider.html.markdown)
+
+## OIDC subject 형식과 인증 실패 확인
+
+`Son-github/portfolio`는 2026-10-25 생성된 저장소이므로, 2026-07-15 이후의 숫자 ID 포함 subject를 사용합니다. 공개 GitHub API로 확인한 소유자 ID는 `83553103`, 저장소 ID는 `1432895806`입니다.
+
+```text
+repo:Son-github@83553103/portfolio@1432895806:ref:refs/heads/main
+```
+
+`github_owner_id`, `github_repository_id`로 숫자 ID를 관리하며, IAM은 `StringEquals`로 이 subject 하나와 `sts.amazonaws.com` audience를 허용합니다. 와일드카드로 조건을 넓히지 않습니다. 저장소를 변경·재생성하면 숫자 ID와 이름을 함께 확인해야 합니다.
+
+`Not authorized to perform sts:AssumeRoleWithWebIdentity`가 발생하면 Actions의 `Inspect OIDC subject without logging the token` 단계에 나온 `sub`/`aud`, AWS 역할의 신뢰 정책, GitHub `AWS_ROLE_ARN`을 대조합니다. 이 단계는 JWT 원문을 출력하지 않습니다. 커스텀 subject나 GitHub Environment를 사용하는 경우에는 실제 발급 형식과 맞춰야 합니다.
+
+Terraform 파일을 push하는 것만으로 AWS 역할 정책이 바뀌지는 않습니다. 사용자가 로컬에서 새 계획을 검토하고 신뢰 정책 변경을 직접 반영해야 합니다. 기존 인프라를 먼저 삭제할 필요는 없습니다.
+
+[GitHub의 immutable subject 공식 설명](https://docs.github.com/en/actions/reference/security/oidc#immutable-subject-claims)

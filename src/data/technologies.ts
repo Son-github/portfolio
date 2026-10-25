@@ -78,6 +78,9 @@ export const technologyLogos: Record<string, TechnologyLogo> = {
   ...Object.fromEntries(
     technologies.map(({ name, logo }) => [name.toLowerCase(), { name, logo }]),
   ),
+  "argo cd": { name: "Argo CD", logo: "argo" },
+  argocd: { name: "Argo CD", logo: "argo" },
+  jenkins: { name: "Jenkins", logo: "jenkins" },
   ecs: { name: "ECS", logo: "amazonecs" },
   "ecs fargate": { name: "ECS Fargate", logo: "amazonecs" },
   "spring boot": { name: "Spring Boot", logo: "springboot" },

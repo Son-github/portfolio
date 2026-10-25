@@ -22,3 +22,9 @@ create_github_oidc_provider  = false
 # Son-github/portfolio의 공개 숫자 ID입니다. OIDC의 새 subject 형식에 사용합니다.
 github_owner_id      = "83553103"
 github_repository_id = "1432895806"
+
+# 기존 예산 재사용: docs/OPERATIONS.md 확인 후 실제 로컬 tfvars에만 설정하세요.
+# 실제 이메일을 이 예제 또는 GitHub에 커밋하지 마세요.
+enable_cost_budget = false
+cost_budget_name   = "My Monthly Cost Budget"
+budget_alert_email = ""

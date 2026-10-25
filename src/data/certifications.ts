@@ -4,7 +4,7 @@ import type {
   CredentialType,
 } from "@/types/certification";
 // 새로운 자격증은 이 배열에 객체를 추가하면 자동으로 웹사이트에 표시됩니다. category와 credentialType을 구분해서 입력해야 합니다.
-// acquiredAt은 YYYY-MM-DD, order는 선택적인 수동 순서입니다. 확인 URL은 실제 주소만 입력하세요.
+// acquiredAt은 YYYY-MM-DD(일자를 모르면 YYYY-MM), order는 선택적인 수동 순서입니다. 확인 URL은 실제 주소만 입력하세요.
 export const certifications: Certification[] = [
   {
     id: "aws-saa",
@@ -23,6 +23,15 @@ export const certifications: Certification[] = [
     category: "national_public",
     credentialType: "national_technical",
     icon: "award",
+  },
+  {
+    id: "pccp-java-level-1",
+    name: "PCCP Lv.1 · Java",
+    issuer: "(주)그렙",
+    acquiredAt: "2024-11",
+    category: "private_international",
+    credentialType: "private",
+    icon: "badge",
   },
   {
     id: "sqld",

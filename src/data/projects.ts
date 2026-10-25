@@ -14,7 +14,16 @@ export const projects: Project[] = [
     summary: "대규모 트래픽 대응을 위한 AWS 클라우드 인프라 구축",
     description:
       "Multi-AZ와 EKS 기반 인프라를 설계하고,\nHPA·Karpenter를 활용한 자동 확장 환경을 구축했습니다.\nk6 부하 테스트를 통해 시스템의 확장 동작을 검증했습니다.",
-    technologies: ["AWS", "Kubernetes", "Terraform", "Redis", "Datadog"],
+    technologies: [
+      "AWS",
+      "Kubernetes",
+      "Terraform",
+      "Redis",
+      "Datadog",
+      "Argo CD",
+      "Jenkins",
+      "Docker",
+    ],
     image: "/projects/cloudwave.svg",
     imageAlt: "CloudWave 프로젝트 이미지 준비 중",
     githubUrl: "https://github.com/cw-5jang6bu",
@@ -30,12 +39,12 @@ export const projects: Project[] = [
     type: "개인 서비스 개발 및 클라우드 운영",
     summary: "일상 정보 서비스의 AWS 인프라 구축 및 운영",
     description:
-      "Spring Boot 기반 서비스를 ECS Fargate에 배포하고,\nGitHub Actions를 활용해 배포 과정을 자동화했습니다.\nCloudWatch 로그 분석으로 운영 중 발생한 오류를 해결했습니다.",
+      "Spring Boot 기반 서비스를 AWS에 배포하고,\nGitHub Actions를 활용해 배포 과정을 자동화했습니다.\nCloudWatch 로그 분석으로 운영 중 발생한 오류를 해결했습니다.",
     technologies: [
       "AWS",
-      "ECS Fargate",
       "Spring Boot",
-      "RDS PostgreSQL",
+      "Terraform",
+      "Docker",
       "CloudFront",
       "GitHub Actions",
     ],

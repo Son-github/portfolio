@@ -84,6 +84,25 @@ jobs:
           merge-multiple: true
       - name: Check required configuration before AWS authentication
         run: node scripts/deploy-static.mjs --check
+      - name: Inspect OIDC subject without logging the token
+        # JWT와 요청용 Bearer 토큰은 출력하지 않고 sub/aud만 확인합니다.
+        run: |
+          node --input-type=module <<'NODE'
+          const url = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
+          url.searchParams.set('audience', 'sts.amazonaws.com');
+          const response = await fetch(url, {
+            headers: { Authorization: `Bearer ${process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN}` },
+            signal: AbortSignal.timeout(15000),
+          });
+          if (!response.ok) throw new Error(`OIDC request failed: ${response.status}`);
+          const { value } = await response.json();
+          let claims;
+          try {
+            claims = JSON.parse(Buffer.from(value.split('.')[1], 'base64url').toString('utf8'));
+          } catch { throw new Error('Could not decode OIDC claims'); }
+          console.log('OIDC sub:', claims.sub);
+          console.log('OIDC aud:', claims.aud);
+          NODE
       - name: Get temporary AWS credentials through GitHub OIDC
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:

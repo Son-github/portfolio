@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="1100" viewBox="0 0 1480 1100" role="img" aria-labelledby="title description">
+<title id="title">Portfolio delivery, deployment and operations architecture</title>
+<desc id="description">Gabia DNS resolves the browser to CloudFront, which serves a private S3 origin in Seoul using OAC. ACM in us-east-1 provides HTTPS. GitHub Actions uses OIDC temporary deployment credentials. Existing CloudFront metrics and an account-wide imported cost budget support manual operations.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#546b89"/></marker><marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3777ce"/></marker></defs>
+<style>text{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;fill:#182d49}.title{font-size:28px;font-weight:700}.label{font-size:18px;font-weight:650}.small{font-size:14px;fill:#526782}.micro{font-size:12px;fill:#647994;letter-spacing:1px}.group{font-size:13px;font-weight:650;fill:#526782;letter-spacing:1.3px}.wire{fill:none;stroke:#546b89;stroke-width:2;marker-end:url(#arrow)}.control{fill:none;stroke:#3777ce;stroke-width:2;stroke-dasharray:6 5;marker-end:url(#blue)}</style>
+<rect width="1480" height="1100" rx="20" fill="#f8fafc"/>
+<text x="40" y="48" class="title">SON JONGIN / Portfolio Architecture</text>
+<text x="40" y="77" class="small">Static delivery · Keyless deployment · Lightweight operations</text>
+
+<rect x="350" y="110" width="1090" height="400" rx="12" fill="#f0f5fb" stroke="#bacbe0"/>
+<text x="374" y="138" class="group">AWS ACCOUNT / DELIVERY PLANE</text>
+<rect x="375" y="160" width="350" height="320" rx="12" fill="#f8faff" stroke="#d4dfed"/>
+<text x="394" y="187" class="group">GLOBAL EDGE</text>
+<rect x="1080" y="160" width="335" height="320" rx="12" fill="#f8faff" stroke="#d4dfed"/>
+<text x="1100" y="187" class="group">AP-NORTHEAST-2 / SEOUL</text>
+<rect x="40" y="160" width="250" height="100" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="40" y="174" width="4" height="72" rx="2" fill="#72869c"/>
+<text x="60" y="190" class="label">Gabia DNS</text>
+<text x="60" y="216" class="small">www.son-portfolio.site</text>
+<text x="60" y="236" class="small">CNAME → CloudFront</text>
+<rect x="40" y="320" width="250" height="105" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="40" y="334" width="4" height="77" rx="2" fill="#3777ce"/>
+<text x="60" y="350" class="label">Visitor browser</text>
+<text x="60" y="376" class="small">HTTPS · GET / HEAD</text>
+<text x="60" y="396" class="small">HTML / JS / CSS / images</text>
+<rect x="405" y="310" width="290" height="115" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="405" y="324" width="4" height="87" rx="2" fill="#8c4fff"/>
+<text x="425" y="340" class="label">Amazon CloudFront</text>
+<text x="425" y="366" class="small">TLS termination · edge cache</text>
+<text x="425" y="386" class="small">HTTPS redirect · compression</text>
+<text x="425" y="410" class="micro">GLOBAL</text>
+<rect x="1100" y="310" width="295" height="115" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="1100" y="324" width="4" height="87" rx="2" fill="#3e9648"/>
+<text x="1120" y="340" class="label">Amazon S3</text>
+<text x="1120" y="366" class="small">Private static origin</text>
+<text x="1120" y="386" class="small">Block Public Access · OAC only</text>
+<text x="1120" y="410" class="micro">SEOUL</text>
+<rect x="760" y="165" width="285" height="105" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="760" y="179" width="4" height="77" rx="2" fill="#ba752b"/>
+<text x="780" y="195" class="label">AWS Certificate Manager</text>
+<text x="780" y="221" class="small">Public TLS certificate</text>
+<text x="780" y="241" class="small">DNS validation at Gabia</text>
+<text x="780" y="255" class="micro">US-EAST-1</text>
+<path d="M 165 320 V 260" class="control"/>
+<text x="181" y="294" class="small">DNS lookup</text>
+<path d="M 290 372 H 405" class="wire"/>
+<text x="312" y="358" class="small">HTTPS</text>
+<path d="M 695 372 H 1100" class="wire"/>
+<text x="775" y="357" class="small">Cache miss · OAC / SigV4</text>
+<path d="M 760 220 H 550 V 310" class="control"/>
+<text x="585" y="245" class="small">Certificate</text>
+<rect x="40" y="550" width="1400" height="220" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<text x="62" y="579" class="group">DEPLOYMENT / CONTROL PLANE</text>
+<rect x="65" y="605" width="300" height="130" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="65" y="619" width="4" height="102" rx="2" fill="#334155"/>
+<text x="85" y="635" class="label">GitHub Actions</text>
+<text x="85" y="661" class="small">main → lint / test / build</text>
+<text x="85" y="681" class="small">Checked static artifact</text>
+<rect x="430" y="605" width="325" height="130" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="430" y="619" width="4" height="102" rx="2" fill="#b46c28"/>
+<text x="450" y="635" class="label">AWS STS / IAM role</text>
+<text x="450" y="661" class="small">GitHub OIDC · temporary credentials</text>
+<text x="450" y="681" class="small">Repository + main trust condition</text>
+<rect x="825" y="605" width="295" height="130" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="825" y="619" width="4" height="102" rx="2" fill="#3777ce"/>
+<text x="845" y="635" class="label">Static publish</text>
+<text x="845" y="661" class="small">Upload build artifact to S3</text>
+<text x="845" y="681" class="small">CloudFront invalidation + verify</text>
+<path d="M 365 670 H 430" class="control"/>
+<path d="M 755 670 H 825" class="control"/>
+<text x="1150" y="636" class="label">Least privilege</text>
+<text x="1150" y="663" class="small">One bucket + one distribution</text>
+<text x="1150" y="687" class="small">No infrastructure apply in CI</text>
+<path d="M 1120 620 H 1248 V 425" class="control"/>
+<rect x="40" y="810" width="1400" height="230" rx="12" fill="#f0f5fb" stroke="#bacbe0" stroke-dasharray="6 5"/>
+<text x="62" y="839" class="group">OPERATIONS / OPTIONAL SETUP</text>
+<rect x="65" y="860" width="640" height="135" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="65" y="874" width="4" height="107" rx="2" fill="#8c4fff"/>
+<text x="85" y="890" class="label">CloudFront basic metrics</text>
+<text x="85" y="916" class="small">Requests · BytesDownloaded · 4xxErrorRate · 5xxErrorRate</text>
+<text x="85" y="936" class="small">Existing free metrics · no alarms / log collection</text>
+<text x="85" y="956" class="small">Requests measure HTTP activity, not unique visitors</text>
+<rect x="745" y="860" width="670" height="135" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
+<rect x="745" y="874" width="4" height="107" rx="2" fill="#3e9648"/>
+<text x="765" y="890" class="label">AWS Budgets → owner email</text>
+<text x="765" y="916" class="small">Reuse existing account-wide monthly budget</text>
+<text x="765" y="936" class="small">ACTUAL cost alerts: &gt; $1 / &gt; $3</text>
+<text x="765" y="956" class="small">Human decision → manually Disable / Enable</text>
+<text x="62" y="1022" class="small">No automatic shutdown · No Budget Actions · No SNS / Lambda / log collection</text>
+<text x="40" y="1076" class="small">Solid: content request flow     Dashed: configuration / deployment     Optional operations require user setup</text>
+</svg>
