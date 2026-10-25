@@ -1,4 +1,5 @@
-import { Mail, Phone, Github, ArrowUpRight } from "lucide-react";
+import { EmailCopyButton } from "@/components/ui/EmailCopyButton";
+import { Phone, Github, ArrowUpRight } from "lucide-react";
 import { TextLines } from "@/components/ui/TextLines";
 import { portfolio } from "@/data/portfolio";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -8,12 +9,6 @@ import { StaggerContainer } from "@/components/ui/StaggerContainer";
 /** 연락처 값은 data/portfolio.ts에서 수정합니다. 빈 전화번호는 표시하지 않습니다. */
 export function Contact() {
   const contacts = [
-    {
-      label: "EMAIL",
-      value: portfolio.email,
-      href: `mailto:${portfolio.email}`,
-      Icon: Mail,
-    },
     {
       label: "PHONE",
       value: portfolio.phone,
@@ -40,6 +35,9 @@ export function Contact() {
         >
           <p className="body-copy">{portfolio.contactDescription}</p>
           <address className="contact-details">
+            {portfolio.email.trim() && (
+              <EmailCopyButton email={portfolio.email} />
+            )}
             {contacts.map(({ label, value, href, Icon }) => (
               <a
                 className="contact-detail"

@@ -3,7 +3,7 @@
 export const heroProfile = {
   name: "손종인",
   role: "Developer",
-  introduction: "사용자 관점에서 항상 생각하는 사람입니다.",
+  introduction: "개발과 인프라에 대한 이해를 바탕으로 더 안정적인 서비스 운영 환경을 고민합니다.",
   avatar: "/images/profile-avatar.webp",
   avatarAlt: "네이비 후드 차림의 캐릭터 프로필 일러스트",
 };

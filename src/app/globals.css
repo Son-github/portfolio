@@ -1856,3 +1856,14 @@ button:focus-visible,
     border-radius: 12px;
   }
 }
+
+/* 이메일 복사 버튼만 링크 행과 동일한 너비·정렬로 표시합니다. */
+#contact .contact-email-copy {
+  width: 100%;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+#contact .contact-email-copy .contact-detail-value {
+  user-select: all;
+}

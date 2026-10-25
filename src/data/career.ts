@@ -8,12 +8,12 @@ export const careers: Career[] = [
   {
     id: "smart-transport-infrastructure",
     type: "work",
-    organization: "스마트 교통 시스템 구축 사업",
-    title: "IT 인프라 점검 및 구축 지원",
+    organization: "(주)포인정보",
+    title: "스마트 교통 시스템 구축 지원 및 점검",
     startDate: "2025-04",
     endDate: "2026-02",
     highlights: [
-      "네트워크 장비 및 시스템 연동 상태 확인",
+      "네트워크 구성 및 시스템 연동 상태 확인",
       "현장 점검 및 검수 관련 자료 관리",
       "협력업체와의 일정 및 구축 자료 협의",
     ],
@@ -21,17 +21,20 @@ export const careers: Career[] = [
   {
     id: "cloudwave-training",
     type: "training",
-    organization: "CloudWave",
+    organization: "CloudWave / CJ올리브네트웍스",
     title: "클라우드 교육 및 인프라 구축 프로젝트",
     startDate: "2024-12",
     endDate: "2025-02",
-    description: "AWS 기반 인프라 설계 및 구축",
+    highlights: [
+      "Linux, 네트워크부터 Docker, Kubernetes, Ansible 등 인프라 관련 기술 학습",
+      "기업 시스템 운영 환경을 가정한 AWS 기반의 클라우드 인프라 아키텍처 설계 및 구축",
+    ]
   },
   {
     id: "computer-science-degree",
     type: "education",
     organization: "한국외국어대학교",
-    title: "컴퓨터공학 졸업",
+    title: "컴퓨터.전자시스템공학전 졸업",
     startDate: "2023-02",
   },
 ];
