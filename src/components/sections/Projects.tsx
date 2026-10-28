@@ -9,9 +9,9 @@ export function Projects({ items = projects }: { items?: Project[] } = {}) {
     <section id="projects" className="section projects">
       <SectionReveal className="container">
         <SectionHeading label="PROJECTS">
-          실제 서비스의 문제를
+          실제 서비스를 개발하고 인프라를 구축하며
           <br />
-          클라우드로 해결한 프로젝트입니다.
+          IT 시스템에 대한 시야를 넓혔습니다.
         </SectionHeading>
         <div className="project-list">
           {[...items]
