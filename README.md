@@ -1,77 +1,67 @@
-# SON JONGIN · Cloud Engineer & DevOps
+# 손종인 포트폴리오
 
-서비스 요구사항에 맞는 인프라를 설계하고, 배포 자동화와 운영 과정의 문제를 해결하는 손종인의 포트폴리오입니다. 프로젝트 경험을 소개하는 웹사이트와 함께, 인프라 정의 및 애플리케이션 배포 흐름을 코드로 관리합니다.
+클라우드 인프라 구축과 서비스 배포 경험을 정리한 포트폴리오입니다.
+Next.js로 만든 정적 사이트를 S3와 CloudFront로 제공하며, 인프라는 Terraform으로 관리합니다.
 
-[포트폴리오 보기](https://www.son-portfolio.site) · [GitHub](https://github.com/Son-github) · [이메일](mailto:jongin718@gmail.com)
+[포트폴리오](https://www.son-portfolio.site) · [GitHub](https://github.com/Son-github) · [이메일](mailto:jongin718@gmail.com)
 
 ## 주요 프로젝트
 
-| 프로젝트                                                      | 구분                        | 구현·검증 내용                                                                              | 주요 기술                                                            |
-| ------------------------------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| [CloudWave](https://github.com/cw-5jang6bu)                   | 클라우드 인프라 팀 프로젝트 | Multi-AZ·EKS 인프라 설계, HPA·Karpenter 자동 확장, k6 부하 테스트를 통한 확장 동작 검증     | AWS, Kubernetes, Terraform, Redis, Datadog, Argo CD, Jenkins, Docker |
-| [Daily Briefing](https://github.com/Son-github/dailybriefing) | 개인 서비스 개발·운영       | Spring Boot 서비스를 AWS에 배포, GitHub Actions 배포 자동화, CloudWatch 로그 기반 오류 분석 | AWS, Spring Boot, Terraform, Docker, CloudFront, GitHub Actions      |
+| 프로젝트                                                      | 작업 내용                                                                  | 주요 기술                                                       |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [CloudWave](https://github.com/cw-5jang6bu)                   | Multi-AZ·EKS 인프라 설계, HPA·Karpenter 자동 확장 구성, k6 부하 테스트     | AWS, Kubernetes, Terraform, Datadog, Argo CD, Jenkins, Docker   |
+| [Daily Briefing](https://github.com/Son-github/dailybriefing) | Spring Boot 서비스 배포, 오류 로그 기반 원인 분석 및 대응 방안 이메일 알림 | AWS, Spring Boot, Terraform, Docker, CloudFront, GitHub Actions |
 
-이 저장소는 위 프로젝트를 소개하는 포트폴리오 웹사이트입니다. 프로젝트별 실제 구현 코드는 각 링크에서 확인할 수 있습니다.
+프로젝트별 구현 코드는 각 저장소에서 확인할 수 있습니다.
 
-## 이 저장소의 설계 포인트
+## 클라우드 아키텍처
 
-- **서버 없이 제공하는 정적 웹사이트:** Next.js의 정적 내보내기로 S3와 CloudFront에서 제공할 수 있도록 구성했습니다.
-- **인프라와 배포 권한 분리:** Terraform은 호스팅 리소스를 정의하고, GitHub Actions 역할은 해당 버킷의 파일 업로드와 해당 CDN의 조회·캐시 갱신만 허용합니다.
-- **장기 인증 키 없는 배포:** GitHub OIDC의 저장소·브랜치 조건으로 `Son-github/portfolio`의 `main`만 AWS 임시 자격 증명을 발급받도록 정의했습니다.
-- **검증한 산출물의 재사용:** PR에서는 검사와 빌드만 수행합니다. `main` 배포에서는 빌드 아티팩트를 그대로 사용하고, 배포 후 실제 HTML과 산출물의 SHA-256을 비교합니다.
-- **가벼운 운영과 비용 인지:** CloudFront 기본 지표와 기존 계정 예산의 $1·$3 실제 비용 알림을 준비했습니다. 유료 수집 서버나 자동 중지 없이, 지표 확인 후 운영자가 중지를 판단합니다.
-- **콘텐츠 확장과 접근성:** 프로젝트·경력·기술 데이터를 UI와 분리했습니다. 반응형 레이아웃, 키보드 탐색, 모션 감소 설정을 지원합니다.
+![포트폴리오 클라우드 아키텍처](docs/architecture.svg)
 
-## 서비스와 배포 구조
+- **호스팅:** 가비아 CNAME으로 CloudFront에 연결합니다. 정적 파일은 서울 리전의 비공개 S3에 저장하고, HTTPS 인증서는 버지니아 북부(`us-east-1`)에서 관리합니다.
+- **원본 보호:** S3 퍼블릭 접근을 차단하고, OAC와 버킷 정책으로 지정한 CloudFront 배포의 읽기 요청만 허용합니다.
+- **배포 권한:** GitHub OIDC로 `main` 브랜치에 임시 자격 증명을 발급합니다. 배포 역할은 대상 버킷의 파일 업로드와 CloudFront 조회·캐시 무효화에 필요한 권한만 가집니다.
 
-![정적 전송·OIDC 배포·운영 경계를 구분한 클라우드 아키텍처](docs/architecture.svg)
+[Terraform 설정](infra/terraform/README.md) · [AWS 공식 아이콘](https://aws.amazon.com/architecture/icons/)
 
-아키텍처는 **콘텐츠 전송 / 배포 제어 / 운영 관측**으로 구분했습니다. 실선은 방문자의 요청 경로, 점선은 인증서·배포 설정 흐름입니다.
+## 배포 흐름
 
-| 경계        | 구성과 역할                                               |
-| ----------- | --------------------------------------------------------- |
-| 외부 DNS    | 가비아 CNAME으로 CloudFront 연결. 기존 네임서버 유지      |
-| 글로벌 엣지 | CloudFront 캐시·HTTPS, ACM 인증서만 us-east-1             |
-| 서울 리전   | 비공개 S3 정적 산출물. OAC 서명 원본 요청만 허용          |
-| 배포 제어   | GitHub Actions → OIDC 임시 역할 → S3 업로드·CDN 캐시 갱신 |
-| 운영 관측   | CloudFront 기본 지표, 계정 전체 예산 이메일               |
+PR에서는 린트·타입 검사·배포 검증 테스트·정적 빌드를 수행합니다.
+`main` 배포에서는 검사한 빌드 결과물을 S3에 업로드하고 CloudFront 캐시를 무효화합니다.
+배포 후에는 사이트의 HTML과 빌드 결과물의 SHA-256을 비교합니다.
 
-호스팅은 비공개 S3와 CloudFront 종량제로 정의하고, DNS는 가비아에서 관리합니다. S3·배포 리전은 서울, CloudFront용 ACM 인증서는 버지니아로 분리했습니다. 별도의 상시 실행 서버·WAF·Route 53 영역은 구성하지 않습니다. CloudFront 무료 사용량 초과, S3 저장·요청, 도메인 갱신은 과금 대상입니다. 세부 리소스와 비용 범위는 [Terraform 안내](infra/terraform/README.md)에 정리했습니다.
+Terraform은 로컬에서 별도로 적용하며, GitHub Actions에서는 실행하지 않습니다.
 
-자동 배포는 인프라·OIDC 역할·GitHub 변수 설정 후 동작합니다. 예산 관리는 기본 비활성화이며 아래 운영 설정을 별도로 마쳐야 합니다.
+## 운영과 비용
 
-## 요청량 확인과 비용 운영
+CloudFront의 기본 지표로 요청 수, 전송량, 4xx·5xx 오류율을 확인합니다. 요청 수는 방문자 수와 다르며 별도 방문자 분석 도구는 사용하지 않습니다.
 
-| 확인할 내용                | 방법                                 | 추가 구성                   |
-| -------------------------- | ------------------------------------ | --------------------------- |
-| 요청량·전송량·4xx/5xx 비율 | CloudFront 콘솔의 무료 기본 지표     | 별도 AWS 리소스 없음        |
-| 월간 발생 비용             | 기존 `My Monthly Cost Budget` 재사용 | ACTUAL $1·$3 초과 시 이메일 |
-| 방문 급증 시 중지·재개     | 운영자가 CloudFront Disable / Enable | 자동 조치 없음              |
+비용 알림은 기존 `My Monthly Cost Budget`을 재사용하도록 구성했습니다. 활성화하면 실제 비용 $1·$3 초과 시 이메일을 보냅니다. 계정 전체의 크레딧·환불 차감 전 비용을 기준으로 하며, 기존 월 $5 예산과 알림 조건도 유지합니다.
 
-별도의 방문자 분석 도구는 설치하지 않습니다. CloudFront Requests는 방문자 수가 아닙니다. 예산은 **계정 전체**를 감시하며 기존 크레딧·환불 제외 기준을 유지합니다. 집계와 이메일에는 지연이 있고 지출 상한을 보장하지 않습니다. 기존 월 $5 한도와 3개 알림 조건도 보존합니다.
+예산 알림에는 집계 지연이 있고 자동 차단 기능은 없습니다. 필요하면 운영자가 CloudFront를 직접 비활성화합니다. S3 저장·요청, CloudFront 무료 범위 초과 사용량, 도메인 갱신 비용은 별도로 발생할 수 있습니다.
 
-기본 지표 조회·Budget 모니터링/이메일은 무료 범위만 사용합니다. 기존 S3·CloudFront·도메인 비용은 계속 발생할 수 있습니다. 실제 수신 이메일 입력, 예산 계획 검토와 적용은 [운영 안내](docs/OPERATIONS.md)를 따릅니다. 실제 AWS 적용·배포는 자동으로 실행하지 않습니다.
+이메일 설정과 적용 순서는 [운영 안내](docs/OPERATIONS.md)에 정리했습니다.
 
-## 기술 스택
+## 사용 기술
 
-| 영역        | 구성                                                   |
-| ----------- | ------------------------------------------------------ |
-| 웹사이트    | Next.js 15, React 19, TypeScript, Tailwind CSS 4       |
-| 인터랙션    | Motion, IntersectionObserver, CSS transform·opacity    |
-| 인프라 정의 | Terraform, S3, CloudFront, OAC, ACM, 가비아 DNS        |
-| 운영        | CloudFront 기본 지표, AWS Budgets 이메일               |
-| CI/CD       | GitHub Actions, OIDC, 빌드 아티팩트, 배포 후 HTML 검증 |
+| 구분      | 구성                                             |
+| --------- | ------------------------------------------------ |
+| 웹사이트  | Next.js 15, React 19, TypeScript, Tailwind CSS 4 |
+| 화면 동작 | Motion, IntersectionObserver                     |
+| 인프라    | Terraform, S3, CloudFront, OAC, ACM, 가비아 DNS  |
+| 배포      | GitHub Actions, OIDC                             |
+| 운영      | CloudFront 기본 지표, AWS Budgets 이메일 알림    |
 
 ## 로컬 실행
 
-Node.js 20.9 이상이 필요합니다. CI는 Node.js 22를 사용합니다.
+Node.js 20.9 이상이 필요합니다. GitHub Actions에서는 Node.js 22를 사용합니다.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-[http://127.0.0.1:3000](http://127.0.0.1:3000)에서 확인하고, 서버를 실행한 터미널에서 **Control + C**로 종료합니다.
+[http://127.0.0.1:3000](http://127.0.0.1:3000)에서 확인합니다. 서버 종료는 실행한 터미널에서 **Control + C**를 누릅니다.
 
 ```sh
 npm run lint
@@ -80,24 +70,26 @@ npm run build
 npm run typecheck
 ```
 
-정적 결과물은 `out/`에 생성됩니다. `test:deploy`는 AWS 호출 없이 배포의 계정·원본·접근 제어 검사 로직을 검증합니다.
+정적 빌드 결과는 `out/`에 생성됩니다. `test:deploy`는 AWS에 접속하지 않고 계정·원본·접근 제어 검증 로직을 테스트합니다.
 
-## 코드 탐색
+## 디렉터리
 
 ```text
-src/data/              프로젝트·경력·기술·프로필 데이터
-src/components/        섹션·프로젝트·재사용 UI
-src/hooks/             섹션 감지와 Reveal 동작
-src/lib/animation.ts   공통 애니메이션 설정
-docs/                 아키텍처·개발·배포·비용 운영 안내
-infra/terraform/       호스팅·OIDC·최소 배포 권한 정의
-.github/workflows/     PR 검증과 main 자동 배포
-scripts/               정적 배포 도구와 로컬 테스트
+src/data/              프로젝트·경력·기술·연락처 데이터
+src/components/        섹션 및 공통 UI
+src/hooks/             섹션 감지와 등장 효과
+src/lib/animation.ts   애니메이션 설정
+infra/terraform/       호스팅·배포 권한·비용 알림 구성
+.github/workflows/     검사 및 자동 배포
+scripts/               배포 스크립트와 테스트
+docs/                  개발·배포·운영 문서
 ```
 
-- [개발·콘텐츠 관리](docs/DEVELOPMENT.md): 실행·종료, 프로젝트·경력 추가, 프로필 이미지와 모션 설정
-- [처음 GitHub에 올리고 배포하기](docs/GETTING_STARTED.md): Git 초기화부터 최초 배포·도메인 연결까지
-- [배포·운영 안내](docs/DEPLOYMENT.md): 초기 설정, GitHub Variables, 자동 배포 흐름과 복구 방법
-- [Terraform 구성](infra/terraform/README.md): 리소스별 역할, 도메인 연결과 비용 범위
-- [요청량·비용·수동 중지](docs/OPERATIONS.md): 예산 이메일 설정, CloudFront 기본 지표, 중지·재개
-- [운영 기능 검증 기록](docs/OPERATIONS-VALIDATION.md): Terraform 계획과 실제 설정이 필요한 항목
+## 관련 문서
+
+- [개발·콘텐츠 관리](docs/DEVELOPMENT.md)
+- [최초 배포](docs/GETTING_STARTED.md)
+- [배포·복구](docs/DEPLOYMENT.md)
+- [Terraform 구성](infra/terraform/README.md)
+- [지표 확인·비용 알림·수동 중지](docs/OPERATIONS.md)
+- [운영 기능 검증 기록](docs/OPERATIONS-VALIDATION.md)

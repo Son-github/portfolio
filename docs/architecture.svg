@@ -1,91 +1,128 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="1100" viewBox="0 0 1480 1100" role="img" aria-labelledby="title description">
-<title id="title">Portfolio delivery, deployment and operations architecture</title>
-<desc id="description">Gabia DNS resolves the browser to CloudFront, which serves a private S3 origin in Seoul using OAC. ACM in us-east-1 provides HTTPS. GitHub Actions uses OIDC temporary deployment credentials. Existing CloudFront metrics and an account-wide imported cost budget support manual operations.</desc>
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#546b89"/></marker><marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3777ce"/></marker></defs>
-<style>text{font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;fill:#182d49}.title{font-size:28px;font-weight:700}.label{font-size:18px;font-weight:650}.small{font-size:14px;fill:#526782}.micro{font-size:12px;fill:#647994;letter-spacing:1px}.group{font-size:13px;font-weight:650;fill:#526782;letter-spacing:1.3px}.wire{fill:none;stroke:#546b89;stroke-width:2;marker-end:url(#arrow)}.control{fill:none;stroke:#3777ce;stroke-width:2;stroke-dasharray:6 5;marker-end:url(#blue)}</style>
-<rect width="1480" height="1100" rx="20" fill="#f8fafc"/>
-<text x="40" y="48" class="title">SON JONGIN / Portfolio Architecture</text>
-<text x="40" y="77" class="small">Static delivery · Keyless deployment · Lightweight operations</text>
+<svg xml:lang="ko" xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title description">
+<title id="title">포트폴리오 | 클라우드 아키텍처</title>
+<desc id="description">Terraform으로 관리하는 정적 포트폴리오 구성. 가비아 DNS로 CloudFront에 연결하고, OAC 서명 요청으로 서울 리전의 비공개 S3에서 파일을 가져옵니다. HTTPS 인증서는 버지니아 북부 리전에 있습니다. GitHub Actions는 OIDC 임시 역할로 파일을 배포하고 캐시를 무효화합니다. 비용 알림은 기존 계정 예산을 선택적으로 사용합니다.</desc>
+<!-- AWS Architecture Icons: official Icon-package_07312026, https://aws.amazon.com/architecture/icons/ . Service artwork embedded without external image dependencies. -->
+<defs>
+<marker id="request-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10z" fill="#397cc6"/></marker>
+<marker id="config-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10z" fill="#8055b6"/></marker>
+<marker id="deploy-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10z" fill="#32834f"/></marker>
+</defs>
+<style>
+text{font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;fill:#20364e}
+.title{font-size:30px;font-weight:700}.subtitle{font-size:17px;fill:#687e96}
+.group{font-size:21px;font-weight:700}.region{font-size:20px;font-weight:700;fill:#397cc6}
+.service{font-size:23px;font-weight:700}.body{font-size:16px;fill:#687e96}
+.note{font-size:15px;fill:#687e96}.legend{font-size:14px;font-weight:700}
+.request{fill:none;stroke:#397cc6;stroke-width:2.5;marker-end:url(#request-arrow)}
+.config{fill:none;stroke:#8055b6;stroke-width:2.2;stroke-dasharray:7 5;marker-end:url(#config-arrow)}
+.deploy{fill:none;stroke:#32834f;stroke-width:2.2;stroke-dasharray:7 5;marker-end:url(#deploy-arrow)}
+</style>
+<rect width="1600" height="1000" fill="white"/>
 
-<rect x="350" y="110" width="1090" height="400" rx="12" fill="#f0f5fb" stroke="#bacbe0"/>
-<text x="374" y="138" class="group">AWS ACCOUNT / DELIVERY PLANE</text>
-<rect x="375" y="160" width="350" height="320" rx="12" fill="#f8faff" stroke="#d4dfed"/>
-<text x="394" y="187" class="group">GLOBAL EDGE</text>
-<rect x="1080" y="160" width="335" height="320" rx="12" fill="#f8faff" stroke="#d4dfed"/>
-<text x="1100" y="187" class="group">AP-NORTHEAST-2 / SEOUL</text>
-<rect x="40" y="160" width="250" height="100" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="40" y="174" width="4" height="72" rx="2" fill="#72869c"/>
-<text x="60" y="190" class="label">Gabia DNS</text>
-<text x="60" y="216" class="small">www.son-portfolio.site</text>
-<text x="60" y="236" class="small">CNAME → CloudFront</text>
-<rect x="40" y="320" width="250" height="105" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="40" y="334" width="4" height="77" rx="2" fill="#3777ce"/>
-<text x="60" y="350" class="label">Visitor browser</text>
-<text x="60" y="376" class="small">HTTPS · GET / HEAD</text>
-<text x="60" y="396" class="small">HTML / JS / CSS / images</text>
-<rect x="405" y="310" width="290" height="115" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="405" y="324" width="4" height="87" rx="2" fill="#8c4fff"/>
-<text x="425" y="340" class="label">Amazon CloudFront</text>
-<text x="425" y="366" class="small">TLS termination · edge cache</text>
-<text x="425" y="386" class="small">HTTPS redirect · compression</text>
-<text x="425" y="410" class="micro">GLOBAL</text>
-<rect x="1100" y="310" width="295" height="115" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="1100" y="324" width="4" height="87" rx="2" fill="#3e9648"/>
-<text x="1120" y="340" class="label">Amazon S3</text>
-<text x="1120" y="366" class="small">Private static origin</text>
-<text x="1120" y="386" class="small">Block Public Access · OAC only</text>
-<text x="1120" y="410" class="micro">SEOUL</text>
-<rect x="760" y="165" width="285" height="105" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="760" y="179" width="4" height="77" rx="2" fill="#ba752b"/>
-<text x="780" y="195" class="label">AWS Certificate Manager</text>
-<text x="780" y="221" class="small">Public TLS certificate</text>
-<text x="780" y="241" class="small">DNS validation at Gabia</text>
-<text x="780" y="255" class="micro">US-EAST-1</text>
-<path d="M 165 320 V 260" class="control"/>
-<text x="181" y="294" class="small">DNS lookup</text>
-<path d="M 290 372 H 405" class="wire"/>
-<text x="312" y="358" class="small">HTTPS</text>
-<path d="M 695 372 H 1100" class="wire"/>
-<text x="775" y="357" class="small">Cache miss · OAC / SigV4</text>
-<path d="M 760 220 H 550 V 310" class="control"/>
-<text x="585" y="245" class="small">Certificate</text>
-<rect x="40" y="550" width="1400" height="220" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<text x="62" y="579" class="group">DEPLOYMENT / CONTROL PLANE</text>
-<rect x="65" y="605" width="300" height="130" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="65" y="619" width="4" height="102" rx="2" fill="#334155"/>
-<text x="85" y="635" class="label">GitHub Actions</text>
-<text x="85" y="661" class="small">main → lint / test / build</text>
-<text x="85" y="681" class="small">Checked static artifact</text>
-<rect x="430" y="605" width="325" height="130" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="430" y="619" width="4" height="102" rx="2" fill="#b46c28"/>
-<text x="450" y="635" class="label">AWS STS / IAM role</text>
-<text x="450" y="661" class="small">GitHub OIDC · temporary credentials</text>
-<text x="450" y="681" class="small">Repository + main trust condition</text>
-<rect x="825" y="605" width="295" height="130" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="825" y="619" width="4" height="102" rx="2" fill="#3777ce"/>
-<text x="845" y="635" class="label">Static publish</text>
-<text x="845" y="661" class="small">Upload build artifact to S3</text>
-<text x="845" y="681" class="small">CloudFront invalidation + verify</text>
-<path d="M 365 670 H 430" class="control"/>
-<path d="M 755 670 H 825" class="control"/>
-<text x="1150" y="636" class="label">Least privilege</text>
-<text x="1150" y="663" class="small">One bucket + one distribution</text>
-<text x="1150" y="687" class="small">No infrastructure apply in CI</text>
-<path d="M 1120 620 H 1248 V 425" class="control"/>
-<rect x="40" y="810" width="1400" height="230" rx="12" fill="#f0f5fb" stroke="#bacbe0" stroke-dasharray="6 5"/>
-<text x="62" y="839" class="group">OPERATIONS / OPTIONAL SETUP</text>
-<rect x="65" y="860" width="640" height="135" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="65" y="874" width="4" height="107" rx="2" fill="#8c4fff"/>
-<text x="85" y="890" class="label">CloudFront basic metrics</text>
-<text x="85" y="916" class="small">Requests · BytesDownloaded · 4xxErrorRate · 5xxErrorRate</text>
-<text x="85" y="936" class="small">Existing free metrics · no alarms / log collection</text>
-<text x="85" y="956" class="small">Requests measure HTTP activity, not unique visitors</text>
-<rect x="745" y="860" width="670" height="135" rx="12" fill="#ffffff" stroke="#cdd8e5"/>
-<rect x="745" y="874" width="4" height="107" rx="2" fill="#3e9648"/>
-<text x="765" y="890" class="label">AWS Budgets → owner email</text>
-<text x="765" y="916" class="small">Reuse existing account-wide monthly budget</text>
-<text x="765" y="936" class="small">ACTUAL cost alerts: &gt; $1 / &gt; $3</text>
-<text x="765" y="956" class="small">Human decision → manually Disable / Enable</text>
-<text x="62" y="1022" class="small">No automatic shutdown · No Budget Actions · No SNS / Lambda / log collection</text>
-<text x="40" y="1076" class="small">Solid: content request flow     Dashed: configuration / deployment     Optional operations require user setup</text>
+<text x="40" y="53" class="title">포트폴리오 | 클라우드 아키텍처</text>
+<text x="40" y="87" class="subtitle">정적 웹 호스팅 · 비공개 S3 원본 · Terraform 구성 기준</text>
+<rect x="285" y="135" width="1270" height="695" rx="15" fill="#fbfdff" stroke="#20364e" stroke-width="1.7"/>
+<text x="305" y="168" class="group">AWS 클라우드</text>
+<rect x="870" y="195" width="640" height="400" rx="14" fill="#f7faff" stroke="#397cc6" stroke-width="1.7" stroke-dasharray="7 6"/>
+<text x="890" y="230" class="region">서울 리전 · ap-northeast-2</text>
+<rect x="330" y="195" width="385" height="175" rx="14" fill="#f7faff" stroke="#397cc6" stroke-width="1.7" stroke-dasharray="7 6"/>
+<text x="350" y="225" class="region">버지니아 북부 · us-east-1</text>
+<rect x="350" y="245" width="345" height="100" rx="12" fill="white" stroke="#b7cbe0" stroke-width="1.7"/>
+<g transform="translate(368 271)"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 64" version="1.1" x="0" y="0">
+    <title>Icon-Architecture/48/Arch_AWS-Certificate-Manager_48</title>
+    <g id="acm-Icon-Architecture/48/Arch_AWS-Certificate-Manager_48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="acm-Icon-Architecture-BG/48/Security-Identity-Compliance" fill="#DD344C">
+            <rect id="acm-Rectangle" x="0" y="0" width="64" height="64" />
+        </g>
+        <path d="M28.722,30.981 C28.946,31.214 29.042,31.541 28.983,31.858 L28.394,34.998 L31.486,33.143 C31.644,33.047 31.823,33 32,33 C32.178,33 32.357,33.047 32.515,33.143 L35.608,34.998 L35.018,31.852 C34.958,31.535 35.055,31.209 35.279,30.976 L37.94,28.197 L34.355,27.665 C34.041,27.618 33.769,27.426 33.619,27.147 L31.992,24.104 L30.325,27.158 C30.175,27.432 29.906,27.621 29.596,27.668 L26.057,28.204 L28.722,30.981 Z M26.018,36.815 L26.922,31.995 L23.279,28.197 C23.02,27.927 22.933,27.536 23.054,27.183 C23.174,26.829 23.481,26.572 23.851,26.516 L28.806,25.764 L31.122,21.521 C31.298,21.2 31.635,21 32,21 L32.004,21 C32.371,21.002 32.708,21.205 32.882,21.528 L35.146,25.76 L40.147,26.503 C40.517,26.558 40.826,26.814 40.947,27.168 C41.068,27.523 40.981,27.914 40.722,28.184 L37.077,31.988 L37.983,36.816 C38.056,37.203 37.895,37.596 37.572,37.821 C37.249,38.045 36.825,38.06 36.486,37.857 L32,35.166 L27.515,37.857 C27.356,37.953 27.178,38 27,38 C26.8,38 26.6,37.94 26.429,37.821 C26.106,37.596 25.945,37.203 26.018,36.815 L26.018,36.815 Z M12,17.017 L51.997,17.017 L51.997,13 L12,13 L12,17.017 Z M54,52 C54,52.265 53.895,52.52 53.707,52.707 C53.52,52.895 53.266,53 53,53 L48,53 L48,51 L52,51 L51.998,19.017 L12,19.017 L12,51 L41,51 L41,53 L11,53 C10.448,53 10,52.552 10,52 L10,12 C10,11.448 10.448,11 11,11 L52.997,11 C53.55,11 53.997,11.448 53.997,12 L54,52 Z M19,47 L24,47 L24,45 L19,45 L19,47 Z M27,47 L38,47 L38,45 L27,45 L27,47 Z M19,42.997 L24,42.997 L24,40.997 L19,40.997 L19,42.997 Z M27,43 L45,43 L45,41 L27,41 L27,43 Z" id="acm-AWS-Certificate-Manager_Icon_48_Squid" fill="#FFFFFF" />
+    </g>
+</svg></g>
+<text x="434" y="288" class="service" style="fill:#8055b6">ACM · HTTPS</text>
+<text x="434" y="315" class="body">공인 TLS 인증서</text>
+<text x="330" y="410" class="note">글로벌 엣지</text>
+<rect x="330" y="435" width="330" height="110" rx="12" fill="white" stroke="#b7cbe0" stroke-width="1.7"/>
+<g transform="translate(348 461)"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 64" version="1.1" x="0" y="0">
+    <title>Icon-Architecture/48/Arch_Amazon-CloudFront_48</title>
+    <g id="cf-Icon-Architecture/48/Arch_Amazon-CloudFront_48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="cf-Icon-Architecture-BG/48/Networking-Content-Delivery" fill="#8C4FFF">
+            <rect id="cf-Rectangle" x="0" y="0" width="64" height="64" />
+        </g>
+        <path d="M41.5,43.5 C40.397,43.5 39.5,42.603 39.5,41.5 C39.5,40.397 40.397,39.5 41.5,39.5 C42.603,39.5 43.5,40.397 43.5,41.5 C43.5,42.603 42.603,43.5 41.5,43.5 L41.5,43.5 Z M41.5,37.5 C39.294,37.5 37.5,39.294 37.5,41.5 C37.5,43.706 39.294,45.5 41.5,45.5 C43.706,45.5 45.5,43.706 45.5,41.5 C45.5,39.294 43.706,37.5 41.5,37.5 L41.5,37.5 Z M22.5,32.5 C21.397,32.5 20.5,31.603 20.5,30.5 C20.5,29.397 21.397,28.5 22.5,28.5 C23.603,28.5 24.5,29.397 24.5,30.5 C24.5,31.603 23.603,32.5 22.5,32.5 L22.5,32.5 Z M22.5,26.5 C20.294,26.5 18.5,28.294 18.5,30.5 C18.5,32.706 20.294,34.5 22.5,34.5 C24.706,34.5 26.5,32.706 26.5,30.5 C26.5,28.294 24.706,26.5 22.5,26.5 L22.5,26.5 Z M45.389,47.124 C45.168,46.607 44.936,46.094 44.685,45.591 L42.896,46.486 C43.17,47.035 43.42,47.599 43.656,48.165 C42.82,48.762 41.943,49.288 41.028,49.74 C41.384,48.865 41.694,47.975 41.974,47.012 L40.054,46.454 C39.564,48.134 38.985,49.581 38.184,51.133 C36.357,51.698 34.452,52 32.5,52 C29.465,52 26.567,51.314 23.871,49.976 C22.503,46.615 21.838,43.534 21.838,40.559 C21.838,39.267 22.063,38.196 22.322,36.956 C22.386,36.652 22.45,36.343 22.514,36.024 L20.551,35.638 C20.49,35.949 20.427,36.25 20.365,36.545 C20.094,37.838 19.838,39.06 19.838,40.559 C19.838,43.074 20.274,45.644 21.154,48.354 C16.072,44.724 13,38.854 13,32.5 C13,32.389 13.01,32.273 13.012,32.161 C14.642,31.799 16.123,31.614 17.854,31.571 L17.804,29.572 C16.169,29.612 14.694,29.779 13.163,30.084 C14.081,22.683 19.212,16.394 26.323,14.019 C27.873,14.818 29.02,15.524 30.135,16.37 L31.344,14.776 C30.646,14.248 29.934,13.771 29.146,13.299 C30.244,13.108 31.363,13 32.5,13 C35.032,13 37.532,13.494 39.849,14.439 C39.342,14.593 38.82,14.763 38.243,14.971 L38.923,16.852 C40.316,16.349 41.408,16.04 42.571,15.821 C48.399,19.341 52,25.667 52,32.5 C52,38.156 49.605,43.416 45.389,47.124 L45.389,47.124 Z M43.008,13.749 C39.826,11.95 36.192,11 32.5,11 C30.392,11 28.324,11.301 26.357,11.895 C17.723,14.464 11.568,22.23 11.045,31.196 C11.01,31.625 11,32.062 11,32.5 C11,40.444 15.352,47.707 22.354,51.455 C25.459,53.12 28.968,54 32.5,54 C34.892,54 37.229,53.61 39.437,52.843 C41.684,52.086 43.773,50.963 45.646,49.507 C50.955,45.399 54,39.2 54,32.5 C54,24.732 49.787,17.546 43.008,13.749 L43.008,13.749 Z M38.384,37.411 L37.003,38.858 C34.022,36.015 31.047,34.146 27.637,32.975 L28.287,31.083 C31.979,32.351 35.188,34.362 38.384,37.411 L38.384,37.411 Z M38.444,22.364 C41.282,26.692 42.88,31.444 43.193,36.488 L41.197,36.612 C40.905,31.919 39.417,27.495 36.772,23.46 L38.444,22.364 Z M26.451,26.797 L24.773,25.708 C26.316,23.332 27.639,21.758 29.336,20.278 L30.65,21.786 C29.103,23.135 27.886,24.587 26.451,26.797 L26.451,26.797 Z M34.5,16.5 C35.603,16.5 36.5,17.397 36.5,18.5 C36.5,19.603 35.603,20.5 34.5,20.5 C33.397,20.5 32.5,19.603 32.5,18.5 C32.5,17.397 33.397,16.5 34.5,16.5 L34.5,16.5 Z M34.5,22.5 C36.706,22.5 38.5,20.706 38.5,18.5 C38.5,16.294 36.706,14.5 34.5,14.5 C32.294,14.5 30.5,16.294 30.5,18.5 C30.5,20.706 32.294,22.5 34.5,22.5 L34.5,22.5 Z" id="cf-Amazon-CloudFront_Icon_48_Squid" fill="#FFFFFF" />
+    </g>
+</svg></g>
+<text x="414" y="478" class="service" style="fill:#8055b6">CloudFront</text>
+<text x="414" y="505" class="body">도메인 연결 · 엣지 캐시</text>
+<text x="330" y="579" class="note">HTTPS 리다이렉트 · 보안 헤더</text>
+<text x="330" y="605" class="note">CloudFront 기본 지표 확인</text>
+<rect x="950" y="345" width="490" height="110" rx="12" fill="white" stroke="#b7cbe0" stroke-width="1.7"/>
+<g transform="translate(968 371)"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 64" version="1.1" x="0" y="0">
+    <title>Icon-Architecture/48/Arch_Amazon-Simple-Storage-Service_48</title>
+    <g id="s3-Icon-Architecture/48/Arch_Amazon-Simple-Storage-Service_48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="s3-Icon-Architecture-BG/48/Storage" fill="#7AA116">
+            <rect id="s3-Rectangle" x="0" y="0" width="64" height="64" />
+        </g>
+        <g id="s3-Icon-Service/48/Amazon-Simple-Storage-Service_48" transform="translate(10.999800, 10.000200)" fill="#FFFFFF">
+            <path d="M36.759,23.948 L36.993,22.131 C39.166,23.385 39.842,24.121 40.037,24.424 C39.713,24.485 38.832,24.509 36.759,23.948 L36.759,23.948 Z M19.5,11 C9.125,11 2.382,8.488 2,6.696 L2,6.511 C2.349,5.392 8.14,2 19.5,2 C30.84,2 36.632,5.381 37,6.505 L37,6.616 C36.724,8.446 29.961,11 19.5,11 L19.5,11 Z M34.818,23.362 C30.053,21.797 23.912,18.979 21.594,17.888 C21.535,16.786 20.628,15.906 19.512,15.906 C18.358,15.906 17.418,16.845 17.418,18 C17.418,19.154 18.358,20.094 19.512,20.094 C19.969,20.094 20.389,19.942 20.733,19.693 C23.132,20.822 29.619,23.798 34.558,25.38 L32.837,38.724 C32.583,40.352 27.919,42 19.497,42 C11.072,42 6.405,40.352 6.155,38.751 L2.435,9.814 C5.945,11.915 12.749,13 19.5,13 C26.25,13 33.054,11.915 36.565,9.815 L34.818,23.362 Z M39,6.5 C39,3.431 30.661,0 19.5,0 C8.339,0 -3.55271368e-15,3.431 -3.55271368e-15,6.5 L-3.55271368e-15,7.043 L4.174,39.033 C4.875,43.516 15.123,44 19.497,44 C23.869,44 34.113,43.516 34.818,39.007 L36.501,25.947 C37.778,26.279 38.812,26.456 39.616,26.455 C40.606,26.455 41.273,26.203 41.697,25.697 C42.047,25.281 42.185,24.756 42.085,24.221 C41.857,23 40.403,21.712 37.37,20.044 L37.27,19.989 L39,7.044 L39,6.5 Z" id="s3-Amazon-Simple-Storage-Service-Icon_48_Squid" />
+        </g>
+    </g>
+</svg></g>
+<text x="1034" y="388" class="service" style="fill:#32834f">비공개 S3</text>
+<text x="1034" y="415" class="body">Next.js 정적 파일 · HTML / JS / CSS</text>
+<text x="950" y="282" class="body">CDN을 통해 정적 파일 제공</text>
+<text x="950" y="492" class="body">퍼블릭 접근 차단 · SSE-S3 암호화</text>
+<text x="950" y="520" class="body">버킷 정책: 지정한 배포만 읽기 허용</text>
+<rect x="40" y="235" width="205" height="100" rx="12" fill="white" stroke="#b7cbe0" stroke-width="1.7"/>
+<text x="60" y="278" class="service" style="fill:#8055b6">가비아 DNS</text>
+<text x="60" y="305" class="body">CNAME 레코드</text>
+<rect x="40" y="435" width="205" height="110" rx="12" fill="white" stroke="#b7cbe0" stroke-width="1.7"/>
+<text x="60" y="478" class="service" style="fill:#20364e">사용자</text>
+<text x="60" y="505" class="body">웹 / 모바일</text>
+<path d="M142 335 V435" class="config"/>
+<text x="160" y="389" class="note" style="fill:#8055b6">DNS</text>
+<path d="M245 490 H330" class="request"/>
+<text x="256" y="474" class="note" style="fill:#397cc6">HTTPS</text>
+<path d="M660 490 H800 V400 H950" class="request"/>
+<text x="680" y="474" class="note" style="fill:#397cc6">OAC / SigV4</text>
+<text x="823" y="382" class="note" style="fill:#397cc6">원본 파일 요청</text>
+<path d="M520 345 V435" class="config"/>
+<text x="536" y="391" class="note" style="fill:#8055b6">인증서 연결</text>
+<rect x="40" y="660" width="205" height="110" rx="12" fill="white" stroke="#b7cbe0" stroke-width="1.7"/>
+<text x="60" y="703" class="service" style="fill:#20364e">GitHub Actions</text>
+<text x="60" y="730" class="body">main 브랜치 · 정적 빌드</text>
+<rect x="330" y="660" width="385" height="110" rx="12" fill="white" stroke="#b7cbe0" stroke-width="1.7"/>
+<g transform="translate(348 686)"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 64" version="1.1" x="0" y="0">
+    <title>Icon-Architecture/48/Arch_AWS-Identity-and-Access-Management_48</title>
+    <g id="iam-Icon-Architecture/48/Arch_AWS-Identity-and-Access-Management_48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="iam-Icon-Architecture-BG/48/Security-Identity-Compliance" fill="#DD344C">
+            <rect id="iam-Rectangle" x="0" y="0" width="64" height="64" />
+        </g>
+        <path d="M12,47 L52,47 L52,18 L12,18 L12,47 Z M54,17 L54,48 C54,48.552 53.553,49 53,49 L11,49 C10.447,49 10,48.552 10,48 L10,17 C10,16.448 10.447,16 11,16 L53,16 C53.553,16 54,16.448 54,17 L54,17 Z M35,39 L47,39 L47,37 L35,37 L35,39 Z M45,35 L49,35 L49,33 L45,33 L45,35 Z M35,35 L41,35 L41,33 L35,33 L35,35 Z M22.5,37.5 C22.5,37.776 22.725,38 23,38 C23.275,38 23.5,37.776 23.5,37.5 C23.5,37.224 23.275,37 23,37 C22.725,37 22.5,37.224 22.5,37.5 L22.5,37.5 Z M25.5,37.5 C25.5,38.522 24.882,39.401 24,39.788 L24,42 L22,42 L22,39.788 C21.118,39.401 20.5,38.522 20.5,37.5 C20.5,36.122 21.621,35 23,35 C24.379,35 25.5,36.122 25.5,37.5 L25.5,37.5 Z M16,42.995 L29.995,43 L29.996,41 L27,41 L27,39 L29.997,39 L29.998,37 L27,37 L27,35 L29.999,35 L30,33.005 L16.005,33 L16,42.995 Z M18,31.001 L28.001,31.004 L28.002,26 C28.002,24.976 27.2,24.273 26.722,23.945 C25.847,23.345 24.174,23 23.002,23 L23,23 C20.873,23 18.003,24.232 18.002,26 L18,31.001 Z M14.293,44.701 C14.105,44.513 14,44.259 14,43.994 L14.005,32 C14.005,31.447 14.453,31 15.005,31 L16,31 L16.002,26 C16.003,22.911 19.876,21 23,21 L23.002,21 C24.567,21 26.653,21.473 27.854,22.295 C29.239,23.246 30.003,24.562 30.002,26 L30.001,31.005 L31,31.006 C31.266,31.006 31.52,31.111 31.707,31.299 C31.895,31.487 32,31.741 32,32.006 L31.995,44 C31.995,44.553 31.547,45 30.995,45 L15,44.994 C14.734,44.994 14.48,44.889 14.293,44.701 L14.293,44.701 Z M47,30 L49,30 L49,28 L47,28 L47,30 Z M35,30 L44,30 L44,28 L35,28 L35,30 Z" id="iam-AWS-Identity-and-Access-Management_Icon_48_Squid" fill="#FFFFFF" />
+    </g>
+</svg></g>
+<text x="414" y="703" class="service" style="fill:#8055b6">IAM 배포 역할</text>
+<text x="414" y="730" class="body">저장소·main 브랜치로 인증 제한</text>
+<path d="M245 715 H330" class="deploy"/>
+<text x="252" y="698" class="note" style="fill:#32834f">OIDC</text>
+<path d="M650 660 V545" class="deploy"/>
+<text x="445" y="641" class="note" style="fill:#32834f">캐시 무효화</text>
+<path d="M715 715 H810 V570 H1390 V455" class="deploy"/>
+<text x="1034" y="556" class="note" style="fill:#32834f">정적 파일 업로드</text>
+<rect x="950" y="660" width="490" height="110" rx="12" fill="white" stroke="#b7cbe0" stroke-width="1.7" stroke-dasharray="6 4"/>
+<g transform="translate(968 686)"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 64" version="1.1" x="0" y="0">
+    <title>Icon-Architecture/48/Arch_AWS-Budgets_48</title>
+    <g id="budget-Icon-Architecture/48/Arch_AWS-Budgets_48" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="budget-Icon-Architecture-BG/48/AWS-Cost-Management" fill="#7AA116">
+            <rect id="budget-Rectangle" x="0" y="0" width="64" height="64" />
+        </g>
+        <path d="M37,24 L37,21.414 L32.707,25.707 C32.346,26.068 31.772,26.099 31.375,25.781 L28.741,23.673 L24.707,27.707 L23.293,26.293 L27.96,21.626 C28.321,21.265 28.895,21.235 29.292,21.553 L31.926,23.66 L35.586,20 L33,20 L33,18 L38,18 C38.553,18 39,18.448 39,19 L39,24 L37,24 Z M22,34 L20,34 L20,11 C20,10.448 20.447,10 21,10 L43,10 C43.553,10 44,10.448 44,11 L44,34 L42,34 L42,12 L22,12 L22,34 Z M13,50.443 L13,34.074 L22.179,40.499 L13,50.443 Z M32,47.125 C32.226,47.125 32.451,47.057 32.646,46.922 L40.168,41.656 L49.717,52 L14.283,52 L23.832,41.656 L31.354,46.922 C31.549,47.057 31.774,47.125 32,47.125 L32,47.125 Z M41.821,40.499 L51,34.074 L51,50.443 L41.821,40.499 Z M52.641,31.232 L46.641,26.232 L45.359,27.768 L50.255,31.848 L32,44.627 L13.745,31.848 L18.641,27.768 L17.359,26.232 L11.359,31.232 C11.132,31.422 11,31.703 11,32 L11,53 C11,53.552 11.447,54 12,54 L52,54 C52.553,54 53,53.552 53,53 L53,32 C53,31.703 52.868,31.422 52.641,31.232 L52.641,31.232 Z" id="budget-AWS-Budgets_Icon_48_Squid" fill="#FFFFFF" />
+    </g>
+</svg></g>
+<text x="1034" y="703" class="service" style="fill:#32834f">AWS Budgets · 선택 설정</text>
+<text x="1034" y="730" class="body">기존 계정 예산 · 실제 비용 $1 / $3 초과</text>
+<text x="950" y="801" class="note">계정 전체 비용 → 지정 이메일 알림</text>
+<text x="40" y="884" class="legend" style="fill:#397cc6">요청 흐름</text>
+<text x="212" y="884" class="body">사용자 → CloudFront → 비공개 S3</text>
+<text x="40" y="918" class="legend" style="fill:#8055b6">접근 제어</text>
+<text x="212" y="918" class="body">OAC 서명 요청 · S3 퍼블릭 접근 차단 · OIDC 임시 자격 증명</text>
+<text x="40" y="963" class="note">파란 실선: 파일 요청 · 보라 점선: DNS / 인증서 · 초록 점선: 배포</text>
 </svg>
